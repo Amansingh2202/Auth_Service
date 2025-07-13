@@ -1,4 +1,4 @@
-const {User}= require('../models');
+const {User,Role}= require('../models');
 
 class UserRepository {
 
@@ -54,6 +54,26 @@ class UserRepository {
             throw error;
         }
     }
+
+      async isAdmin(userid){
+        try{
+               const user= await User.findByPk(userid);
+               const adminRole=await  Role.findOne({
+                where:{
+                    name:'ADMIN'
+                }
+               })  
+              
+               return user.hasRole(adminRole);// weather user is exist by this role or not
+
+              // and in this hasRole this (Role) is the table name and this can be hasPermission, hasCategory etc
+
+        }
+        catch(error){
+            console.log("something went wrong in user  repository while checking if user is admin");
+            throw error;
+        }
+      }
 }
 
 module.exports=UserRepository;

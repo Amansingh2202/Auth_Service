@@ -8,7 +8,7 @@ const UserService = require('./services/user_service');
 const {PORT}=require('./config/serverConfig');
 
 const db=require('./models/index');
-
+const {User,Role}= require('./models/index');
  const prepareAndStartServer = async () => {
 
     app.use(bodyParser.json());
@@ -16,9 +16,12 @@ const db=require('./models/index');
     // Register API routes
     app.use('/api', apiRoutes);
 
-    app.listen(PORT, () => {
+    app.listen(PORT, async() => {
      
         console.log(`Server is running on port ${PORT}`);
+
+       
+
 
         if(process.env.DB_SYNC){
               db.sequelize.sync({alter:true})

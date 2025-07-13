@@ -94,11 +94,21 @@ class UserService {
     }
 
    }
+   async isAdmin(userId){
+    try{
+                 return this.userRepository.isAdmin(userId);
+    }
+    catch{
+        console.log("something went wrong in service layer");
+        throw error;
+    }
+    }
+   }
 
    
 
 
 
-}
+
 
 module.exports = UserService;

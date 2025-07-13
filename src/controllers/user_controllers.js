@@ -64,11 +64,31 @@ const UserService=require('../services/user_service');
 
         }
     }
-
+    const isAdmin=async (req,res)=>{
+        try{
+              const response=await userSerice.isAdmin(req.body.id);
+            return res.status(200).json({
+                data: response,
+                success: true,
+                message: 'User is admin',
+                err: {}
+            });
+        }
+        catch(error){
+            return res.status(500).json({
+                data: {},
+                success: false,
+                message: 'Something went wrong',
+                err: error
+            })
+        }
+        
+    }
  
 
  module.exports={
     create,
     signIn,
-    isAuthenticated
+    isAuthenticated,
+    isAdmin
  }   
