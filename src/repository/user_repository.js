@@ -8,7 +8,7 @@ class UserRepository {
             return user;
         }
         catch(error){
-
+                throw error
         }
     }
     async destroy(userid){

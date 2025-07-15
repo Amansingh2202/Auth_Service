@@ -23,25 +23,25 @@ const UserService=require('../services/user_service');
             });
         }
     }
-   const signIn=async(req, res)=> {
-       try{
-                    const response = await userSerice.signIn(req.body.email,req.body.password);
-                    return res.status(200).json({
-                        data: response,
-                        success: true,
-                        message: 'User signed in successfully',
-                        err: {}
-                    }); 
-       }catch(error){
-        return res.status(500).json({
-            data: {},
-            success: false,
-            message: 'Something went wrong',
-            err: error
-        });
-
-       }
-    }
+    const signIn = async (req, res) => {
+        try {
+            const response = await userSerice.signIn(req.body.email, req.body.password);
+            return res.status(200).json({
+                data: response,
+                success: true,
+                message: 'User signed in successfully',
+                err: {}
+            });
+        } catch (error) {
+            return res.status(401).json({
+                data: {},
+                success: false,
+                message: error.message || 'Authentication failed',
+                err: error
+            });
+        }
+    };
+    
     const isAuthenticated=async(req, res)=> {
         try{
            const token=req.headers['x-access-token'];

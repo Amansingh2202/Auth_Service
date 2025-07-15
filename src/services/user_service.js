@@ -2,6 +2,7 @@ const UserRepository= require('../repository/user_repository');
 const jwt= require('jsonwebtoken');
 const { JWT_KEY } = require('../config/serverConfig');
 const bcypt = require('bcrypt');
+const ValidationError = require('../utils/validation-error');
 
 class UserService {
      constructor() {
@@ -13,31 +14,33 @@ class UserService {
             const user = await this.userRepository.create(data);
             return user;
         } catch (error) {
+          
+           
+            console.log("something went wrong in user service while creating user");
             throw error;
         }
     }
 
-    async signIn(email,plainpassword){
-        try{   
-               // Check if user exists
-               const  user=await this.userRepository.getByEmail(email);
-                if(!user){
-                    throw {error: "User does not exist"};
-                }
-                // Check if password matches
-                const passwordMatch=this.checkPassword(plainpassword,user.password);
-                // If password does not match, throw an error
-                if(!passwordMatch){
-                    throw {error: "Invalid Password"};
-                }
-                // If password matches, create a JWT token
-                const newJWT=this.createToken({id:user.id,email:user.email});
-                return newJWT;
-        }
-        catch{
-
+    async signIn(email, plainpassword) {
+        try {
+            const user = await this.userRepository.getByEmail(email);
+            if (!user) {
+                throw new Error("User not found");
+            }
+    
+            const passwordMatch = this.checkPassword(plainpassword, user.password);
+            if (!passwordMatch) {
+                throw new Error("Invalid password");
+            }
+    
+            const newJWT = this.createToken({ id: user.id, email: user.email });
+            return newJWT;
+        } catch (error) {
+            console.log("Error in signIn:", error.message);
+            throw error;
         }
     }
+    
 
     createToken(user)
     {
